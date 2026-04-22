@@ -1,0 +1,23 @@
+{
+  "requires": {
+    "db": {
+      "kind": "postgres",
+      "credentials": {
+        "host": "localhost",
+        "port": 5435,
+        "database": "postgres",
+        "user": "postgres",
+        "password": "postgres"
+      },
+      "[pg]": {
+        "credentials": {
+          "host": "localhost",
+          "port": 5435,
+          "database": "postgres",
+          "user": "postgres",
+          "password": "postgres"
+        }
+      }
+    }
+  }
+}
