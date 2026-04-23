@@ -1,4 +1,5 @@
 {
+  "typescript": true,
   "requires": {
     "db": {
       "kind": "postgres",

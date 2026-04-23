@@ -1,8 +1,10 @@
 using { sap.capire.bookshop as my } from '../db/schema';
 service CatalogService @(odata:'/browse') {
-  @readonly entity Books as projection on my.Books {
-    *, // all fields with the following denormalizations:
-    author.name as author,
-    genre.name as genre,
-  } excluding { createdBy, modifiedBy };
+  entity Books as projection on my.Books;
+
+  function booksPaginated(limit: Integer default 5) returns array of Books;
+
+  function submitOrder(book: Books:ID, quantity: Integer) returns Books;
+
+  function insertBook(title: String, descr: String, stock: Integer, price: Decimal, currency_code: String) returns Books;
 }
