@@ -6,7 +6,7 @@
     xmlns:core="sap.ui.core"
     xmlns="sap.m">
     <Page id="page" showHeader="false" enableScrolling="false">
-        <f:DynamicPage id="periodConfigObjectPage" fitContent="true" preserveHeaderStateOnScroll="true">
+        <f:DynamicPage id="periodConfigObjectPage" fitContent="true" preserveHeaderStateOnScroll="true" busy="{view>/busy}">
             <f:title>
                 <f:DynamicPageTitle>
                     <f:breadcrumbs>
@@ -24,75 +24,70 @@
                     <f:snappedContent>
                         <Text text="Maintain period dates and approval timeline" />
                     </f:snappedContent>
-                    <f:actions>
-                        <Button text="Edit" type="Emphasized" icon="sap-icon://edit" />
-                    </f:actions>
                 </f:DynamicPageTitle>
             </f:title>
 
             <f:header>
                 <f:DynamicPageHeader>
-                    <VBox>
-                        <HBox wrap="Wrap" class="sapUiSmallMarginBottom">
-                            <VBox class="sapUiSmallMarginEnd sapUiTinyMarginBottom">
-                                <Label text="Payroll Period" design="Bold" />
-                                <ObjectIdentifier title="04.2026" />
-                            </VBox>
-                            <VBox class="sapUiSmallMarginEnd sapUiTinyMarginBottom">
-                                <Label text="Period Range" design="Bold" />
-                                <Text text="2026-04-01 to 2026-04-30" />
-                            </VBox>
-                            <VBox class="sapUiTinyMarginBottom">
-                                <Label text="Confirmation Window" design="Bold" />
-                                <Text text="2026-05-01 to 2026-05-05" />
-                            </VBox>
-                        </HBox>
-
-                        <fb:FilterBar id="periodConfigFilterBar" useToolbar="false" class="sapUiTinyMarginTop">
-                            <fb:filterGroupItems>
-                                <fb:FilterGroupItem groupName="__basic" name="payrollPeriod" label="Payroll Period" visibleInFilterBar="true">
-                                    <fb:control>
-                                        <Input id="filterPayrollPeriod" width="12rem" placeholder="MM.YYYY" />
-                                    </fb:control>
-                                </fb:FilterGroupItem>
-                                <fb:FilterGroupItem groupName="__basic" name="payrollPeriodFrom" label="Payroll Period From" visibleInFilterBar="true">
-                                    <fb:control>
-                                        <DatePicker id="filterPayrollPeriodFrom" width="12rem" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" />
-                                    </fb:control>
-                                </fb:FilterGroupItem>
-                                <fb:FilterGroupItem groupName="__basic" name="payrollPeriodTo" label="Payroll Period To" visibleInFilterBar="true">
-                                    <fb:control>
-                                        <DatePicker id="filterPayrollPeriodTo" width="12rem" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" />
-                                    </fb:control>
-                                </fb:FilterGroupItem>
-                                <fb:FilterGroupItem groupName="__basic" name="confirmStartDate" label="Confirm Start Date" visibleInFilterBar="true">
-                                    <fb:control>
-                                        <DatePicker id="filterConfirmStartDate" width="12rem" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" />
-                                    </fb:control>
-                                </fb:FilterGroupItem>
-                                <fb:FilterGroupItem groupName="__basic" name="confirmEndDate" label="Confirm End Date" visibleInFilterBar="true">
-                                    <fb:control>
-                                        <DatePicker id="filterConfirmEndDate" width="12rem" displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd" />
-                                    </fb:control>
-                                </fb:FilterGroupItem>
-                            </fb:filterGroupItems>
-                        </fb:FilterBar>
-                    </VBox>
+                    <fb:FilterBar id="periodConfigFilterBar" useToolbar="false" class="sapUiTinyMarginTop" search=".onFilterChange">
+                        <fb:filterGroupItems>
+                            <fb:FilterGroupItem groupName="__basic" name="payrollPeriod" label="Payroll Period" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Input id="filterPayrollPeriod" width="12rem" placeholder="MM.YYYY" />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem groupName="__basic" name="payrollPeriodFrom" label="Payroll Period From" visibleInFilterBar="true">
+                                <fb:control>
+                                    <DatePicker id="filterPayrollPeriodFrom" width="12rem" displayFormat="dd/MM/yyyy" valueFormat="yyyy-MM-dd" />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem groupName="__basic" name="payrollPeriodTo" label="Payroll Period To" visibleInFilterBar="true">
+                                <fb:control>
+                                    <DatePicker id="filterPayrollPeriodTo" width="12rem" displayFormat="dd/MM/yyyy" valueFormat="yyyy-MM-dd" />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem groupName="__basic" name="confirmStartDate" label="Confirm Start Date" visibleInFilterBar="true">
+                                <fb:control>
+                                    <DatePicker id="filterConfirmStartDate" width="12rem" displayFormat="dd/MM/yyyy" valueFormat="yyyy-MM-dd" />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem groupName="__basic" name="confirmEndDate" label="Confirm End Date" visibleInFilterBar="true">
+                                <fb:control>
+                                    <DatePicker id="filterConfirmEndDate" width="12rem" displayFormat="dd/MM/yyyy" valueFormat="yyyy-MM-dd" />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
                 </f:DynamicPageHeader>
             </f:header>
 
             <f:content>
                 <VBox class="sapUiContentPadding">
-                    <Panel headerText="Periods" expandable="false">
+                    <Panel headerText="" expandable="false">
                         <t:Table
                             id="periodConfigTable"
-                            rows="{table>/items}"
+                            rows="{table>/rows}"
                             visibleRowCount="8"
-                            selectionMode="None"
                             enableBusyIndicator="true"
                             busy="{table>/busy}"
-                            width="auto">
+                            width="auto"
+                            selectionMode="None"
+                            rowActionCount="2"
+                        >
+                            <t:toolbar>
+                                <Toolbar>
+                                    <Title text="Period Configurations" level="H3" />
+                                    <ToolbarSpacer />
+                                    <Button text="Add row" type="Emphasized" icon="sap-icon://add" press=".onCreatePress" />
+                                </Toolbar>
+                            </t:toolbar>
                             <t:columns>
+                                <t:Column visible="false">
+                                    <Label text="ID" />
+                                    <t:template>
+                                        <Text text="{table>ID}" />
+                                    </t:template>
+                                </t:Column>
                                 <t:Column>
                                     <Label text="Payroll Period" />
                                     <t:template>
@@ -124,6 +119,12 @@
                                     </t:template>
                                 </t:Column>
                             </t:columns>
+                            <t:rowActionTemplate>
+                                <t:RowAction>
+                                    <t:RowActionItem type="Custom" icon="sap-icon://edit" text="Edit" press=".onEditPress" />
+                                    <t:RowActionItem type="Delete" icon="sap-icon://delete" text="Remove" press=".onDeletePress" />
+                                </t:RowAction>
+                            </t:rowActionTemplate>
                         </t:Table>
                     </Panel>
                 </VBox>

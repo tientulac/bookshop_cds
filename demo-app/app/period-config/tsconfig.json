@@ -6,20 +6,16 @@
     "allowJs": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "rootDir": "./webapp",
     "outDir": "./dist",
-    "baseUrl": "./",
     "paths": {
       "hrcap/cts/periodconfig/periodconfig/*": [
         "./webapp/*"
       ]
     },
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@sapui5/types",
-      "../../node_modules/@types",
-      "../../node_modules/@sapui5/types"
+    "types": [
+      "@sapui5/types"
     ]
   },
   "include": [

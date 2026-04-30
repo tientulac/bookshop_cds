@@ -1,0 +1,105 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout">
+    <Dialog
+        id="createDialog"
+        title="Period Config"
+        busy="{createDialog>/busy}"
+        contentWidth="48rem"
+    >
+        <content>
+            <l:Grid
+                defaultSpan="L3 M3 S12"
+                hSpacing="1"
+                vSpacing="1"
+                containerQuery="true"
+                class="sapUiSmallMargin"
+            >
+                <Label text="Payroll Period" required="true">
+                    <layoutData>
+                        <l:GridData span="L3 M3 S12" />
+                    </layoutData>
+                </Label>
+                <Input
+                    id="inputPayrollPeriod"
+                    value="{createDialog>/periodConfig/payrollPeriod}"
+                    placeholder="MM.YYYY"
+                    maxLength="7"
+                >
+                    <layoutData>
+                        <l:GridData span="L9 M9 S12" />
+                    </layoutData>
+                </Input>
+
+                <Label text="Period From" required="true">
+                    <layoutData>
+                        <l:GridData span="L3 M3 S12" />
+                    </layoutData>
+                </Label>
+                <DatePicker
+                    id="inputPayrollPeriodFrom"
+                    value="{createDialog>/periodConfig/payrollPeriodFrom}"
+                    displayFormat="dd/MM/yyyy"
+                    valueFormat="yyyy-MM-dd"
+                >
+                    <layoutData>
+                        <l:GridData span="L9 M9 S12" />
+                    </layoutData>
+                </DatePicker>
+
+                <Label text="Period To" required="true">
+                    <layoutData>
+                        <l:GridData span="L3 M3 S12" />
+                    </layoutData>
+                </Label>
+                <DatePicker
+                    id="inputPayrollPeriodTo"
+                    value="{createDialog>/periodConfig/payrollPeriodTo}"
+                    displayFormat="dd/MM/yyyy"
+                    valueFormat="yyyy-MM-dd"
+                >
+                    <layoutData>
+                        <l:GridData span="L9 M9 S12" />
+                    </layoutData>
+                </DatePicker>
+
+                <Label text="Confirm Start" required="true">
+                    <layoutData>
+                        <l:GridData span="L3 M3 S12" />
+                    </layoutData>
+                </Label>
+                <DatePicker
+                    id="inputConfirmStartDate"
+                    value="{createDialog>/periodConfig/confirmStartDate}"
+                    displayFormat="dd/MM/yyyy"
+                    valueFormat="yyyy-MM-dd"
+                >
+                    <layoutData>
+                        <l:GridData span="L9 M9 S12" />
+                    </layoutData>
+                </DatePicker>
+
+                <Label text="Confirm End" required="true">
+                    <layoutData>
+                        <l:GridData span="L3 M3 S12" />
+                    </layoutData>
+                </Label>
+                <DatePicker
+                    id="inputConfirmEndDate"
+                    value="{createDialog>/periodConfig/confirmEndDate}"
+                    displayFormat="dd/MM/yyyy"
+                    valueFormat="yyyy-MM-dd"
+                >
+                    <layoutData>
+                        <l:GridData span="L9 M9 S12" />
+                    </layoutData>
+                </DatePicker>
+            </l:Grid>
+        </content>
+        <buttons>
+            <Button text="Save" type="Emphasized" press=".onSaveCreate" />
+            <Button text="Cancel" press=".onCancelCreate" />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>
