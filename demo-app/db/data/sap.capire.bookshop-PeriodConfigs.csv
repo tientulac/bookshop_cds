@@ -1,0 +1,4 @@
+payrollPeriod , payrollPeriodFrom , payrollPeriodTo , confirmStartDate , confirmEndDate
+01.2026      , 2026-01-01        , 2026-01-31      , 2026-02-01       , 2026-02-05
+02.2026      , 2026-02-01        , 2026-02-28      , 2026-03-01       , 2026-03-05
+03.2026      , 2026-03-01        , 2026-03-31      , 2026-04-01       , 2026-04-05
