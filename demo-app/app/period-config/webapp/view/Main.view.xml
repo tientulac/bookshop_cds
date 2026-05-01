@@ -64,16 +64,7 @@
             <f:content>
                 <VBox class="sapUiContentPadding">
                     <Panel headerText="" expandable="false">
-                        <t:Table
-                            id="periodConfigTable"
-                            rows="{table>/rows}"
-                            visibleRowCount="8"
-                            enableBusyIndicator="true"
-                            busy="{table>/busy}"
-                            width="auto"
-                            selectionMode="None"
-                            rowActionCount="2"
-                        >
+                        <t:Table id="periodConfigTable" rows="{table>/rows}" visibleRowCount="8" enableBusyIndicator="true" busy="{table>/busy}" width="auto" selectionMode="None" rowActionCount="2">
                             <t:toolbar>
                                 <Toolbar>
                                     <Title text="Period Configurations" level="H3" />

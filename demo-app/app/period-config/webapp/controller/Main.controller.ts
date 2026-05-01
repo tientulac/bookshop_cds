@@ -17,7 +17,6 @@ import MessageToast from "sap/m/MessageToast";
  */
 export default class Main extends Controller {
   public formatter = formatter;
-
   private _createDialog: Dialog | null;
 
   public onInit(): void {
@@ -82,28 +81,25 @@ export default class Main extends Controller {
     tableModel.setProperty("/busy", true);
 
     try {
-      const filters =
-        <Partial<PeriodConfig>>tableModel.getProperty("/filters") || {};
+      const filters = <PeriodConfig>tableModel.getProperty("/filters") || {};
 
       const limit = <number>tableModel.getProperty("/limit") || 10;
       const offset = <number>tableModel.getProperty("/offset") || 0;
 
-      const params: string[] = [`limit=${limit}`, `offset=${offset}`];
+      const params = Object.keys(filters).reduce<string[]>(
+        (acc, name) => {
+          const raw = filters[name as keyof PeriodConfig];
+          if (!raw) return acc;
 
-      const appendStringParam = (name: keyof PeriodConfig) => {
-        const raw = filters[name];
-        if (!raw) return;
-        const value = raw.toString().trim();
-        if (!value) return;
-        const escaped = value.replace(/'/g, "''");
-        params.push(`${name}='${escaped}'`);
-      };
+          const value = raw.toString().trim();
+          if (!value) return acc;
 
-      appendStringParam("payrollPeriod");
-      appendStringParam("payrollPeriodFrom");
-      appendStringParam("payrollPeriodTo");
-      appendStringParam("confirmStartDate");
-      appendStringParam("confirmEndDate");
+          const escaped = value.replace(/'/g, "''");
+          acc.push(`${name}='${escaped}'`);
+          return acc;
+        },
+        [`limit=${limit}`, `offset=${offset}`],
+      );
 
       const response = await fetch(`/period/paginated(${params.join(",")})`, {
         method: "GET",
