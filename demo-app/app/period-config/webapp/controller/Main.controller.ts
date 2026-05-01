@@ -18,7 +18,6 @@ import MessageToast from "sap/m/MessageToast";
 export default class Main extends Controller {
   public formatter = formatter;
 
-  DEFAULT_LIMIT = 100;
   private _createDialog: Dialog | null;
 
   public onInit(): void {
@@ -34,10 +33,12 @@ export default class Main extends Controller {
         busy: false,
         rows: [],
         filters: {},
+        limit: 10,
+        offset: 0,
       }),
       "table",
     );
-    void this._loadPeriodConfigs(this.DEFAULT_LIMIT);
+    void this._loadPeriodConfigs();
   }
 
   private setBusy(isBusy: boolean) {
@@ -72,10 +73,10 @@ export default class Main extends Controller {
     const filters = this._getFilterValues();
     const tableModel = <JSONModel>this.getView()?.getModel("table");
     tableModel?.setProperty("/filters", filters);
-    await this._loadPeriodConfigs(this.DEFAULT_LIMIT);
+    await this._loadPeriodConfigs();
   }
 
-  private async _loadPeriodConfigs(limit: number = this.DEFAULT_LIMIT) {
+  private async _loadPeriodConfigs() {
     this.setBusy(true);
     const tableModel = <JSONModel>this.getView()?.getModel("table");
     tableModel.setProperty("/busy", true);
@@ -83,12 +84,16 @@ export default class Main extends Controller {
     try {
       const filters =
         <Partial<PeriodConfig>>tableModel.getProperty("/filters") || {};
-      const params: string[] = [`limit=${limit}`];
+
+      const limit = <number>tableModel.getProperty("/limit") || 10;
+      const offset = <number>tableModel.getProperty("/offset") || 0;
+
+      const params: string[] = [`limit=${limit}`, `offset=${offset}`];
 
       const appendStringParam = (name: keyof PeriodConfig) => {
         const raw = filters[name];
         if (!raw) return;
-        const value = String(raw).trim();
+        const value = raw.toString().trim();
         if (!value) return;
         const escaped = value.replace(/'/g, "''");
         params.push(`${name}='${escaped}'`);
@@ -168,7 +173,7 @@ export default class Main extends Controller {
       }
       this._createDialog?.close();
       MessageToast.show("Period config created successfully.");
-      await this._loadPeriodConfigs(this.DEFAULT_LIMIT);
+      await this._loadPeriodConfigs();
     } catch (error) {
       MessageBox.error(`Cannot save: ${String(error)}`);
     } finally {
@@ -213,7 +218,7 @@ export default class Main extends Controller {
       if (!response.ok) {
         throw new Error(`Delete failed with status ${response.status}`);
       }
-      await this._loadPeriodConfigs(this.DEFAULT_LIMIT);
+      await this._loadPeriodConfigs();
       MessageToast.show("PeriodConfig deleted");
     } catch (error) {
       MessageBox.error(`Cannot delete: ${String(error)}`);

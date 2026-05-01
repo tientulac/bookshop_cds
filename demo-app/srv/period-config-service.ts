@@ -2,32 +2,18 @@ import cds from "@sap/cds";
 import { Pagination } from "../model/pagination";
 import { PeriodConfig } from "../model/period-config";
 
-export type FilterField =
-  | "payrollPeriod"
-  | "payrollPeriodFrom"
-  | "payrollPeriodTo"
-  | "confirmStartDate"
-  | "confirmEndDate";
-
-const FILTER_FIELDS: readonly FilterField[] = [
-  "payrollPeriod",
-  "payrollPeriodFrom",
-  "payrollPeriodTo",
-  "confirmStartDate",
-  "confirmEndDate",
-];
-
-const EXACT_MATCH_FIELDS: readonly Exclude<FilterField, "payrollPeriod">[] = [
-  "payrollPeriodFrom",
-  "payrollPeriodTo",
-  "confirmStartDate",
-  "confirmEndDate",
-];
-
-const normalizeFilterValue = (value?: string): string | undefined => {
-  const normalized = value?.trim();
-  return normalized ? normalized : undefined;
+const FILTER_DEFINITIONS = {
+  payrollPeriod: "like",
+  payrollPeriodFrom: "eq",
+  payrollPeriodTo: "eq",
+  confirmStartDate: "eq",
+  confirmEndDate: "eq",
 };
+
+export type FilterField = keyof typeof FILTER_DEFINITIONS;
+
+const FILTER_FIELDS = Object.keys(FILTER_DEFINITIONS) as FilterField[];
+
 export class PeriodConfigService extends cds.ApplicationService {
   async init() {
     const { PeriodConfigs } = this.entities;
@@ -36,10 +22,8 @@ export class PeriodConfigService extends cds.ApplicationService {
 
     this.on("paginated", async (req) => {
       const reqPage = <Pagination & Partial<PeriodConfig>>req.data;
-      const rawLimit = Number(reqPage?.limit ?? 5);
-      const limit = Number.isFinite(rawLimit)
-        ? Math.max(1, Math.min(rawLimit, 100))
-        : 5;
+      const limit = reqPage.limit;
+      const offset = reqPage.offset;
 
       const query = SELECT.from(PeriodConfigs)
         .columns(
@@ -54,35 +38,35 @@ export class PeriodConfigService extends cds.ApplicationService {
           "modifiedAt",
           "modifiedBy",
         )
-        .limit(limit)
+        .limit(limit, offset)
         .orderBy("modifiedAt desc");
 
       const normalizedFilters = FILTER_FIELDS.reduce<
         Record<FilterField, string | undefined>
       >(
         (acc, field) => {
-          acc[field] = normalizeFilterValue(reqPage?.[field]);
+          acc[field] = reqPage?.[field];
           return acc;
         },
         {} as Record<FilterField, string | undefined>,
       );
 
-      const wherePayload = EXACT_MATCH_FIELDS.reduce<Record<string, unknown>>(
+      const wherePayload = FILTER_FIELDS.reduce<Record<string, unknown>>(
         (acc, field) => {
           const value = normalizedFilters[field];
-          if (value) {
-            acc[field] = value;
+          if (!value) {
+            return acc;
           }
+
+          acc[field] =
+            FILTER_DEFINITIONS[field] === "like"
+              ? { like: `%${value}%` }
+              : value;
+
           return acc;
         },
         {},
       );
-
-      if (normalizedFilters.payrollPeriod) {
-        wherePayload.payrollPeriod = {
-          like: `%${normalizedFilters.payrollPeriod}%`,
-        };
-      }
 
       if (Object.keys(wherePayload).length > 0) {
         query.where(wherePayload);

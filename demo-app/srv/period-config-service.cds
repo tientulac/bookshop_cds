@@ -5,6 +5,7 @@ service PeriodConfigService @(odata:'/period') {
 
   function paginated(
     limit: Integer default 5,
+    offset: Integer default 0,
     payrollPeriod: String,
     payrollPeriodFrom: String,
     payrollPeriodTo: String,
