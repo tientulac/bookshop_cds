@@ -12,7 +12,7 @@ const FILTER_DEFINITIONS = {
 
 export type FilterField = keyof typeof FILTER_DEFINITIONS;
 
-const FILTER_FIELDS = Object.keys(FILTER_DEFINITIONS) as FilterField[];
+const FILTER_FIELDS = <FilterField[]>Object.keys(FILTER_DEFINITIONS);
 
 export class PeriodConfigService extends cds.ApplicationService {
   async init() {
