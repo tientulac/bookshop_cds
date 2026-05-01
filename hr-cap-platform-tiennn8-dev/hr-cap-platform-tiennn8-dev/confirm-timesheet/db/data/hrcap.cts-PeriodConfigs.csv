@@ -1,4 +1,0 @@
-payrollPeriod,ID,payrollPeriodFrom,payrollPeriodTo,confirmStartDate,confirmEndDate,createdAt,createdBy,modifiedAt,modifiedBy
-.\d{4}$,27360527-720d-41ad-8dca-b1283d189971,2019-09-30,2011-06-05,2022-11-02,2015-06-02,2016-07-02T17:00:00.000Z,createdBy.gafin@example.net,2008-11-20T17:00:00.000Z,modifiedBy.gafin@example.com
-.\d{4}$,27360528-4c26-4291-8eaa-cb4e0b56fc03,2004-12-25,2012-04-22,2007-02-02,2012-04-08,2014-08-19T17:00:00.000Z,createdBy.gafio@example.org,2009-05-08T17:00:00.000Z,modifiedBy.gafio@example.com
-.\d{4}$,27360529-e651-4554-92f8-4ef7523b6c44,2001-06-07,2003-10-18,2013-10-23,2007-01-21,2006-11-27T17:00:00.000Z,createdBy.gafip@example.com,2000-09-20T17:00:00.000Z,modifiedBy.gafip@example.net

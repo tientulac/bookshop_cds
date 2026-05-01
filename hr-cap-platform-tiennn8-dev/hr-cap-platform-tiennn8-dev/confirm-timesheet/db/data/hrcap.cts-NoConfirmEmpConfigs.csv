@@ -1,4 +1,0 @@
-employeeID,payrollPeriod,ID,employeeName,payrollPeriodFrom,payrollPeriodTo,createdAt,createdBy,modifiedAt,modifiedBy
-NoConfirmEmpConfigs-22954097,.\d{4}$,22954097-a376-464b-93d6-0815847490e9,employeeName-22954097,2013-01-08,2016-10-06,2007-04-16T17:00:00.000Z,createdBy.dnzht@example.net,2010-03-29T17:00:00.000Z,modifiedBy.dnzht@example.net
-NoConfirmEmpConfigs-22954098,.\d{4}$,22954098-bd8d-404d-a5ac-8da556f5a1dd,employeeName-22954098,2019-10-17,2005-11-03,2003-12-12T17:00:00.000Z,createdBy.dnzhu@example.org,2000-10-13T17:00:00.000Z,modifiedBy.dnzhu@example.com
-NoConfirmEmpConfigs-22954099,.\d{4}$,22954099-8a57-41c7-8b13-0b181561be07,employeeName-22954099,2014-04-19,2003-01-28,2007-08-26T17:00:00.000Z,createdBy.dnzhv@example.net,2000-10-17T17:00:00.000Z,modifiedBy.dnzhv@example.net
