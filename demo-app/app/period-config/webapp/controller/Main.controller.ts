@@ -154,21 +154,26 @@ export default class Main extends Controller {
 
   public async onSaveCreate(): Promise<void> {
     const dialogModel = <JSONModel>this._createDialog?.getModel("createDialog");
+    const periodConfig = <PeriodConfig>(
+      dialogModel?.getProperty("/periodConfig")
+    );
 
     dialogModel.setProperty("/busy", true);
     try {
-      const response = await fetch("/period/save", {
-        method: "POST",
+      const response = await fetch("/period/PeriodConfigs", {
+        method: periodConfig.ID ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          periodConfig: <PeriodConfig>dialogModel?.getProperty("/periodConfig"),
-        }),
+        body: JSON.stringify(periodConfig),
       });
       if (!response.ok) {
         throw new Error(`Save failed with status ${response.status}`);
       }
       this._createDialog?.close();
-      MessageToast.show("Period config created successfully.");
+      MessageToast.show(
+        periodConfig.ID
+          ? "Period config updated successfully."
+          : "Period config created successfully.",
+      );
       await this._loadPeriodConfigs();
     } catch (error) {
       MessageBox.error(`Cannot save: ${String(error)}`);
@@ -199,23 +204,26 @@ export default class Main extends Controller {
     MessageBox.confirm(`Delete period "${record.payrollPeriod}"?`, {
       onClose: async (action: string) => {
         if (action === MessageBox.Action.OK.toString()) {
-          await this._deletePeriodConfig(record.ID);
+          await this._deletePeriodConfig(record.ID, record.payrollPeriod);
         }
       },
     });
   }
 
-  private async _deletePeriodConfig(id: string): Promise<void> {
+  private async _deletePeriodConfig(id: string, payrollPeriod: string) {
     this.setBusy(true);
     try {
-      const response = await fetch(`/period/remove(ID='${id}')`, {
-        method: "GET",
-      });
+      const response = await fetch(
+        `/period/PeriodConfigs(ID='${id}', payrollPeriod='${payrollPeriod}')`,
+        {
+          method: "DELETE",
+        },
+      );
       if (!response.ok) {
         throw new Error(`Delete failed with status ${response.status}`);
       }
       await this._loadPeriodConfigs();
-      MessageToast.show("PeriodConfig deleted");
+      MessageToast.show(`PeriodConfig "${payrollPeriod}" deleted`);
     } catch (error) {
       MessageBox.error(`Cannot delete: ${String(error)}`);
     } finally {

@@ -12,7 +12,4 @@ service PeriodConfigService @(odata:'/period') {
     confirmStartDate: String,
     confirmEndDate: String
   ) returns array of PeriodConfigs;
-
-  action save(periodConfig: PeriodConfigs) returns PeriodConfigs;
-  function remove(ID: UUID) returns Boolean;
 }
